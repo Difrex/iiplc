@@ -1,0 +1,24 @@
+<div class=post>
+	<h2><TMPL_VAR NAME=SUBG></h2>
+	<div class=mail>
+		<i><TMPL_VAR NAME=TIME></i><br>
+		From: <strong><TMPL_VAR NAME=FROM></strong><br>
+		To: <strong><TMPL_VAR NAME=TO></strong> in <TMPL_VAR NAME=ECHO>
+	</div>
+	<div class=text>
+		<p>
+			<TMPL_VAR NAME=POST>
+		</p>
+	</div>
+	<div class=send_form>
+		<form action='/enc' method='GET'><br>
+			<input type='hidden' name='echo' value="<TMPL_VAR NAME=ECHO>" />
+			<input type='hidden' name='to' value="<TMPL_VAR NAME=FROM>" />
+			<input type='hidden' name='hash' value="<TMPL_VAR NAME=HASH>" />
+			<input type='text' size=40 name='subg' value='Re: <TMPL_VAR NAME=SUBG>'><br>
+<textarea name='post' cols=80 rows=12>
+</textarea><br>
+			<input type='submit'>
+		</form>
+	</div>
+</div>

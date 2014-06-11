@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<title><TMPL_VAR NAME=TITLE></title>
+    	<meta charset='utf8'>
+    </head>
+    <STYLE type="text/css">
+   		.post {
+   			border-width: 1;
+   			border: solid;
+   			border-color: #C7BA6C;
+   			border-radius: 10px;
+   			margin-top: 0.5em;
+   			margin-left: 15%;
+   			margin-right: 10%;
+   			padding-left: 5pt;
+   		}
+   		.post h2 {
+   			display: block;
+        /*position: relative;*/
+   			background-color: #C7BA6C;
+   			border-color: #999;
+   			border-radius: 5px;
+   			padding-left: 10px;
+   			margin-right: 10px;
+   			margin-top: 0.5em;
+   			margin-bottom: 0px;
+   		}
+      .post img {
+        display: inline-block;
+        border-radius: 10px;
+      }
+      .subg {
+        display: block;
+        /*background-color: #C7CCCA;*/
+        border-radius: 5px;
+        margin-top: 0.5em;
+        margin-left: 15%;
+        margin-right: 15%;
+        padding-left: 5pt;
+        padding-top: 5pt;
+      }
+      .subg a {
+        color: #222;
+      }
+      .subg a:visited {
+        color: #666;
+      }
+   		.mail {
+   			display: block;
+   			margin-top: 0.1em;
+   			margin-left: 0.5em;
+   		}
+   		.text {
+   			display: block;
+   			margin-left: 0.5em;
+   			margin-top: -0.8em;
+   		}
+   		.headall {
+        text-align: center;
+   			display: block;
+        color: #000;
+        background-color: #C7BA6C;
+        border-radius: 5px;
+        width: 75%;
+        position: top;
+        top: 0px;
+   			margin-left: 15%;
+   			margin-right: 15%;
+        margin-bottom: 0%;
+   		}
+      .headall p {
+        margin-top: -1.5em;
+        text-align: center;
+      }
+      .echo {
+        display: block;
+        background-color: #C7BA6C;
+        /*top: 0px;*/
+        border-width: 1;
+        border: solid;
+        border-color: #C7BA6C;
+        border-radius: 5px;
+        /*margin-top: 1em;*/
+        padding: 0.2em;
+        position: fixed;
+      }
+      .echo a {
+        color: #222;
+      }
+      .answer {
+        color: #222;
+        padding: 0.2em;
+        position: relative;
+      }
+      .answer a {
+        color: #222;
+      }
+      .answer a:visited {
+        color: #222;
+      } 
+ 	</STYLE>
+    <body>
+<div class='headall'>
+  <h1><TMPL_VAR NAME=TITLE></h1>
+  <p>
+    <a href="/get">Получить</a> новые сообщения или 
+    <a href="/me">почитать</a> свою переписку. А еще 
+    можно <a href="/">вернуться</a> в ленту.
+  </p>
+</div>
+<!-- <hr> -->

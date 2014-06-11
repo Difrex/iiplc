@@ -1,0 +1,16 @@
+<div class=post>
+	<h2><TMPL_VAR NAME=SUBG></h2>
+	<div class=mail>
+		<i><TMPL_VAR NAME=TIME></i><br>
+		From: <strong><TMPL_VAR NAME=FROM></strong><br>
+		To: <strong><TMPL_VAR NAME=TO></strong> in <TMPL_VAR NAME=ECHO>
+	</div>
+	<div class=text>
+		<p>
+			<TMPL_VAR NAME=POST>
+		</p>
+	</div>
+	<div class=answer>
+		<a href="/push?echo=<TMPL_VAR NAME=ECHO>&base64=<TMPL_VAR NAME=BASE64>&hash=<TMPL_VAR NAME=HASH>">Отправить</a>
+	</div>
+</div>
