@@ -3,7 +3,7 @@ iiplc
 
 Plack/Perl web client for ii network
 
-== Reqs
+# Reqs
 
 * SQL::Abstract;
 * DBD::SQlite;
@@ -13,6 +13,6 @@ Plack/Perl web client for ii network
 
 **Only GNU/Linux is supported**
 
-= Install
+# Install
 
 I'm lazy. You can use your package manager.
