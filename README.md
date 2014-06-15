@@ -15,4 +15,11 @@ Plack/Perl web client for ii network
 
 # Install
 
-I'm lazy. You can use your package manager.
+Create dirrectories:
+	mkdir {echo,msg}
+
+Install packages.
+On Debian based systems:
+	
+	apt-get install libplack-perl libhtml-template-perl libsql-abstract-perl \
+	libdbd-sqlite3-perl libconfig-tiny-perl
