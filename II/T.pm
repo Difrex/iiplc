@@ -94,7 +94,16 @@ sub post {
 
     my $post = II::T->pre( $data->{post} );
 
+    my $cut;
+    if ( $data->{subg} =~ /Re:\s(.+)/ ) {
+        $cut = $1;
+    }
+    else {
+        $cut = $data->{subg};
+    }
+
     $p->param( SUBG => $data->{subg} );
+    $p->param( CUT => $cut );
     $p->param( TIME => "$time" );
     $p->param( FROM => $data->{from} );
     $p->param( TO   => $data->{to} );
