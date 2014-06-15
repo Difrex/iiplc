@@ -19,6 +19,16 @@ sub head {
     return $t->output;
 }
 
+sub echo {
+    my ($self, $echo) = @_;
+
+    my $e = HTML::Template->new(filename => 't/echo.html');
+
+    $e->param(ECHO => $echo);
+
+    return $e->output();
+}
+
 sub index {
     my ( $self, $echoareas ) = @_;
     my $i = HTML::Template->new( filename => 't/index.html' );

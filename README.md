@@ -8,7 +8,7 @@ Plack/Perl web client for ii network
 * SQL::Abstract;
 * DBD::SQlite;
 * Plack;
-* HTML::Tempplate;
+* HTML::Template;
 * LWP; 
 
 **Only GNU/Linux is supported**

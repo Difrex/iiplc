@@ -63,7 +63,7 @@ sub out {
 }
 
 sub echo_mes {
-    my ( $self, $echo ) = @_;
+    my ( $self, $echo, $view ) = @_;
     my $db = $self->{_db};
     my $t  = $self->{_template};
 
@@ -71,17 +71,25 @@ sub echo_mes {
 
     # Render header
     my $render = $t->head("ii :: $echo");
-    $render .= "<a href=/new?echo=$echo>Новое сообщение</a>";
+    $render .= $t->echo($echo);
 
     my $count = 0;
-    while ( $count < @post ) {
+    if ($view eq 'thread') {
+        while ( $count < @post ) {
 
-        # Render post
-        if ( !( @post[$count]->{subg} =~ /Re.+/ ) ) {
-            $render .= $t->tree( @post[$count] );
+            # Render post
+            if ( !( @post[$count]->{subg} =~ /Re.+/ ) ) {
+                $render .= $t->tree( @post[$count] );
+            }
+
+            $count++;
         }
-
-        $count++;
+    }
+    else {
+        while ( $count < @post ) {
+            $render .= $t->post( @post[$count] );
+            $count++;
+        }
     }
     $render .= $t->foot();
 
