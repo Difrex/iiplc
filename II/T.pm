@@ -164,12 +164,12 @@ sub pre {
     while (<$fh>) {
         my $line = $_;
         if ( ( $line =~ /^====/ ) and ( $pre == 0 ) ) {
-            $txt .= $_;
-            $line =~ s/====/<pre>/g;
+            # $txt .= $_;
+            $line =~ s/====/<pre class="pre">/g;
             $pre = 1;
         }
         elsif ( ( $line =~ /^====/ ) and ( $pre == 1 ) ) {
-            $line =~ s/====/<\/pre>\n====/g;
+            $line =~ s/====/<\/pre>\n/g;
             $pre = 0;
         }
         $txt .= $line;

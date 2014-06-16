@@ -30,7 +30,6 @@ sub send {
     $host .= "u/point";
     my $ua = LWP::UserAgent->new();
     my $response = $ua->post( $host, { 'pauth' => $auth, 'tmsg' => $base64 } );
-    print Dumper($response);
 
     my $db = II::DB->new();
     if ($response->{_rc} == 200) {

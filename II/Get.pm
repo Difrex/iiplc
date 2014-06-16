@@ -65,7 +65,7 @@ sub get_echo {
         my @msg_list = split /\n/, $msgs;
 
         # Begin transaction
-        print "Writing messages\n";
+        print localtime().": writing messages\n";
         $db->begin();
         while (<@msg_list>) {
             my $mes_hash = $_;
@@ -111,7 +111,7 @@ sub get_echo {
         }
         # Commit transaction
         $db->commit();
-        print "Messages writed to DB!\n";
+        print localtime().": messages writed to DB!\n";
     }
     return $msgs;
 }
