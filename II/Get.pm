@@ -63,6 +63,10 @@ sub get_echo {
         = "<!DOCTYPE html><meta charset=utf8><body><h1>Новые сообщения</h1>\n";
     if ( defined($msgs) ) {
         my @msg_list = split /\n/, $msgs;
+
+        # Begin transaction
+        print "Writing messages\n";
+        $db->begin();
         while (<@msg_list>) {
             my $mes_hash = $_;
 
@@ -104,9 +108,10 @@ sub get_echo {
 
             # Write message to DB
             $db->write(%data);
-
-            # $new_messages .= "$post</p>";
         }
+        # Commit transaction
+        $db->commit();
+        print "Messages writed to DB!\n";
     }
     return $msgs;
 }

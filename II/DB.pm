@@ -20,6 +20,22 @@ sub new {
     return $self;
 }
 
+sub begin {
+    my ($self) = @_;
+    my $dbh = $self->{_dbh};
+
+    # Begin transaction
+    $dbh->do('BEGIN');
+}
+
+sub commit {
+    my ($self) = @_;
+    my $dbh = $self->{_dbh};
+
+    # Commmit transaction
+    $dbh->do('COMMIT');
+}
+
 sub write_out {
     my ( $self, %data ) = @_;
     my $dbh = $self->{_dbh};
@@ -51,8 +67,7 @@ sub write {
 
     my $sth = $dbh->prepare($stmt);
     $sth->execute(@bind);
-
-    print "Message writed to DB!\n";
+    $sth->finish();
 }
 
 sub select_out {
