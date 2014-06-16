@@ -13,7 +13,7 @@ Plack/Perl web client for ii network
 
 **Only GNU/Linux is supported**
 
-# Install
+## Install
 
 Create dirrectories:
 	mkdir {echo,msg}
@@ -23,3 +23,7 @@ On Debian based systems:
 	
 	apt-get install libplack-perl libhtml-template-perl libsql-abstract-perl \
 	libdbd-sqlite3-perl libconfig-tiny-perl
+
+## TODO
+
+* Switch to clean SQL database
