@@ -2,6 +2,7 @@ package II::Get;
 use LWP::Simple;
 
 use II::DB;
+use II::Enc;
 
 use Data::Dumper;
 
@@ -22,8 +23,8 @@ sub get_echo {
 
     my $db = II::DB->new();
 
-    my $echo_url = 'e/';
-    my $msg_url  = 'm/';
+    my $echo_url = 'u/e/';
+    my $msg_url  = 'u/m/';
 
     my $msgs;
     foreach my $echo (@$echoareas) {
@@ -43,12 +44,14 @@ sub get_echo {
             or die "Cannot open file: $!\n";
         while (<$echo_fh>) {
             chomp($_);
-            if ( !( -e "./msg/$_" ) ) {
-                $msgs .= $_ . "\n";
-                # @w_cmd = ( 'wget', '-O',
-                #     "./msg/$_", "$host" . "$msg_url" . "$_" );
-                `curl $host$msg_url$_ > ./msg/$_`;
-                # system(@w_cmd) == 0 or die "Cannot download file: $!\n";
+            if ($_ =~ /.{20}/) { 
+                if ( !( -e "./msg/$_" ) ) {
+                    $msgs .= $_ . "\n";
+                    # @w_cmd = ( 'wget', '-O',
+                    #     "./msg/$_", "$host" . "$msg_url" . "$_" );
+                    `curl $host$msg_url$_ > ./msg/$_`;
+                    # system(@w_cmd) == 0 or die "Cannot download file: $!\n";
+                }
             }
         }
         close $echo_fh;
@@ -62,7 +65,10 @@ sub get_echo {
         my @msg_list = split /\n/, $msgs;
         while (<@msg_list>) {
             my $mes_hash = $_;
-            open my $m, "<", "./msg/$mes_hash"
+
+            my $text = II::Enc->decrypt("./msg/$mes_hash");
+
+            open my $m, "<", \$text
                 or die "Cannot open message: $!\n";
 
             my @mes;

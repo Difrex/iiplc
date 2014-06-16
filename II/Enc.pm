@@ -18,6 +18,24 @@ sub new {
     return $self;
 }
 
+sub decrypt {
+    my ( $self, $file ) = @_;
+
+    open my $fh, "<", $file or die "Cannot open file $file: $!\n";
+    my $message;
+    while (<$fh>) {
+        $message .= $_;
+    }
+    close $fh;
+
+    my @enc = split /:/, $message;
+
+    # Decrypt message
+    my $dec = `echo "$enc[1]" | base64 -d`;
+
+    return $dec;
+}
+
 sub encode {
     my ($self) = @_;
     my $config = $self->{_config};
@@ -26,10 +44,10 @@ sub encode {
     my $hash   = II::Enc->new_hash();
 
     # Make base64 message
-    my $message = $data->{echo}."\n";
-    $message .= $data->{to}."\n";
-    $message .= $data->{subg}."\n\n";
-    $message .= '@repto:'.$data->{hash}."\n" if defined($data->{hash});
+    my $message = $data->{echo} . "\n";
+    $message .= $data->{to} . "\n";
+    $message .= $data->{subg} . "\n\n";
+    $message .= '@repto:' . $data->{hash} . "\n" if defined( $data->{hash} );
     $message .= $data->{post};
 
     my $encoded = `echo "$message" | base64`;
