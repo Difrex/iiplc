@@ -26,9 +26,10 @@ my $echo = sub {
 
     my $req = Plack::Request->new($env);
 
-    my $query = $req->param('echo');
+    my $echo = $req->param('echo');
+    my $view = $req->param('view');
 
-    my $echo_messages = $render->echo_mes($query);
+    my $echo_messages = $render->echo_mes($echo, $view);
 
     return [ 200, [ 'Content-type' => 'text/html' ], ["$echo_messages"], ];
 };
