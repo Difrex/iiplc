@@ -20,11 +20,11 @@ sub head {
 }
 
 sub echo {
-    my ($self, $echo) = @_;
+    my ( $self, $echo ) = @_;
 
-    my $e = HTML::Template->new(filename => 't/echo.html');
+    my $e = HTML::Template->new( filename => 't/echo.html' );
 
-    $e->param(ECHO => $echo);
+    $e->param( ECHO => $echo );
 
     return $e->output();
 }
@@ -103,7 +103,7 @@ sub post {
     }
 
     $p->param( SUBG => $data->{subg} );
-    $p->param( CUT => $cut );
+    $p->param( CUT  => $cut );
     $p->param( TIME => "$time" );
     $p->param( FROM => $data->{from} );
     $p->param( TO   => $data->{to} );
@@ -115,10 +115,10 @@ sub post {
 }
 
 sub new_mes {
-    my ($self, $echo) = @_;
+    my ( $self, $echo ) = @_;
 
-    my $n = HTML::Template->new(filename => 't/new.html');
-    $n->param(ECHO => $echo);
+    my $n = HTML::Template->new( filename => 't/new.html' );
+    $n->param( ECHO => $echo );
 
     return $n->output();
 }
@@ -155,7 +155,8 @@ sub pre {
     $post =~ s/(.?)\n/$1<br>\n/g;
     $post
         =~ s/(https?:\/\/.+\.(jpg|png|gif))/<a href="$1"><img src="$1" width="15%" height="15%" \/><\/a>/g;
-
+    $post
+        =~ s/(https?:\/\/.+\.(JPG|PNG|GIF))/<a href="$1"><img src="$1" width="15%" height="15%" \/><\/a>/g;
     # Not are regexp parsing
     my $pre = 0;
     my $txt;

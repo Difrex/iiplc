@@ -27,6 +27,9 @@
    			margin-top: 0.5em;
    			margin-bottom: 0px;
    		}
+      .post a {
+        text-decoration: none;
+      }
       .post img {
         display: inline-block;
         border-radius: 10px;
@@ -74,6 +77,12 @@
         margin-top: -1.5em;
         text-align: center;
       }
+      .headall a {
+        color: #222;
+      }
+      .headall a:hover {
+        color: #666;
+      }
       .echo {
         display: block;
         background-color: #C7BA6C;
@@ -120,9 +129,10 @@
 <div class='headall'>
   <h1><TMPL_VAR NAME=TITLE></h1>
   <p>
-    <a href="/get">Получить</a> новые сообщения или 
-    <a href="/me">почитать</a> свою переписку. А еще 
-    можно <a href="/">вернуться</a> в ленту.
+    [<a href="/">лента</a>]&nbsp
+    [<a href="/get">получить сообщения</a>]&nbsp
+    [<a href="/me">моя переписка</a>]&nbsp
+    [<a href="/out">неотправленные сообщения</a>]&nbsp
   </p>
 </div>
 <!-- <hr> -->
