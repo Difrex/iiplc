@@ -19,19 +19,10 @@ sub new {
 }
 
 sub decrypt {
-    my ( $self, $file ) = @_;
-
-    open my $fh, "<", $file or die "Cannot open file $file: $!\n";
-    my $message;
-    while (<$fh>) {
-        $message .= $_;
-    }
-    close $fh;
-
-    my @enc = split /:/, $message;
+    my ( $self, $base64 ) = @_;
 
     # Decrypt message
-    my $dec = `echo "$enc[1]" | base64 -d`;
+    my $dec = `echo "$base64" | base64 -d`;
 
     return $dec;
 }

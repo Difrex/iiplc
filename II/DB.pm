@@ -20,6 +20,25 @@ sub new {
     return $self;
 }
 
+sub check_hash {
+    my ( $self, $hash, $echo ) = @_;
+    my $dbh = $self->{_dbh};
+
+    my $q = "select hash from echo where hash='$hash' and echo='$echo'";
+    my $sth = $dbh->prepare($q);
+    $sth->execute();
+
+    while ( my @h = $sth->fetchrow_array() ) {
+        my ($base_hash) = @h;
+        if ($hash eq $base_hash) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+}
+
 sub begin {
     my ($self) = @_;
     my $dbh = $self->{_dbh};
@@ -36,6 +55,18 @@ sub commit {
     $dbh->do('COMMIT');
 }
 
+sub write_echo {
+    my ( $self, %data ) = @_;
+    my $dbh = $self->{_dbh};
+    my $sql = $self->{_sql};
+
+    my ( $stmt, @bind ) = $sql->insert( 'echo', \%data );
+
+    my $sth = $dbh->prepare($stmt);
+    $sth->execute(@bind);
+    $sth->finish();
+}
+
 sub write_out {
     my ( $self, %data ) = @_;
     my $dbh = $self->{_dbh};
@@ -50,10 +81,10 @@ sub write_out {
 }
 
 sub update_out {
-    my ($self, $hash) = @_;
+    my ( $self, $hash ) = @_;
     my $dbh = $self->{_dbh};
 
-    my $q = "update output set send=1 where hash='$hash'";
+    my $q   = "update output set send=1 where hash='$hash'";
     my $sth = $dbh->prepare($q);
     $sth->execute();
 }

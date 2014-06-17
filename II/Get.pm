@@ -1,5 +1,6 @@
 package II::Get;
-use LWP::Simple;
+use LWP::UserAgent;
+use HTTP::Request;
 
 use II::DB;
 use II::Enc;
@@ -9,7 +10,14 @@ use Data::Dumper;
 sub new {
     my $class = shift;
 
-    my $self = { _config => shift, };
+    my $ua = LWP::UserAgent->new();
+    $ua->agent("iiplc/0.1rc1");
+    my $db   = II::DB->new();
+    my $self = {
+        _config => shift,
+        _ua     => $ua,
+        _db     => $db,
+    };
 
     bless $self, $class;
     return $self;
@@ -20,57 +28,95 @@ sub get_echo {
     my $config    = $self->{_config};
     my $echoareas = $config->{echoareas};
     my $host      = $config->{host};
-
-    my $db = II::DB->new();
+    my $ua        = $self->{_ua};
+    my $db        = $self->{_db};
 
     my $echo_url = 'u/e/';
     my $msg_url  = 'u/m/';
 
     my $msgs;
+    my $base64;
     foreach my $echo (@$echoareas) {
-        # my @content = get( "$host" . "$echo_url" . "$echo" );
-        my @content = `curl $host$echo_url$echo`;
 
-        # if ( is_success( getprint( "$host" . "$echo_url" . "$echo" ) ) ) {
+        # Get echo message hashes
+        my $req_echo = HTTP::Request->new( GET => "$host$echo_url$echo" );
+        my $res_echo = $ua->request($req_echo);
 
-        # Write echoes file
-        open my $echo_fh, ">", "./echo/$echo"
-            or die "Cannot open file: $!\n";
-        print $echo_fh @content;
-        close $echo_fh;
+        my @new;
+        $db->begin();
+        if ( $res_echo->is_success ) {
+            my @mes = split /\n/, $res_echo->content();
+            while (<@mes>) {
+                if ( $_ =~ /.{20}/ ) {
+                    if ( $db->check_hash( $_, $echo ) == 0 ) {
+                        my $echo_hash = {
+                            echo => $echo,
+                            hash => $_,
+                        };
+                        my %e_write = (
+                            echo => $echo,
+                            hash => $_,
+                        );
 
-        # Get messages
-        open my $echo_fh, "<", "./echo/$echo"
-            or die "Cannot open file: $!\n";
-        while (<$echo_fh>) {
-            chomp($_);
-            if ($_ =~ /.{20}/) { 
-                if ( !( -e "./msg/$_" ) ) {
-                    $msgs .= $_ . "\n";
-                    # @w_cmd = ( 'wget', '-O',
-                    #     "./msg/$_", "$host" . "$msg_url" . "$_" );
-                    `curl $host$msg_url$_ > ./msg/$_`;
-                    # system(@w_cmd) == 0 or die "Cannot download file: $!\n";
+                        # Write new echo message
+                        $db->write_echo(%e_write);
+
+                        push( @new, $echo_hash );
+                    }
                 }
             }
         }
-        close $echo_fh;
+        else {
+            print $res->status_line, "\n";
+        }
+        $db->commit();
 
+        # Make new messages url
+        # my $new_messages_url = "$host$msg_url";
+        # my $count = 0;
+        # while ( $count < @new ) {
+        #     $new_messages_url .= $new[$count]->{hash} . "/";
+        #     $count++;
         # }
+
+        # Get messages
+        my @msg_con;
+        my $count = 0;
+        while ( $count < @new ) {
+            my $new_messages_url = "$host$msg_url" . $new[$count]->{hash};
+            my $req_msg = HTTP::Request->new( GET => $new_messages_url );
+            my $res_msg = $ua->request($req_msg);
+            if ( $res_msg->is_success() ) {
+                push( @msg_con, $res_msg->content() );
+            }
+            else {
+                print $res->status_line, "\n";
+            }
+            $count++;
+        }
+
+        # Populate $msgs and $base64
+        while (<@msg_con>) {
+            my @message = split /:/, $_;
+            if ( defined( $message[1] ) ) {
+                $msgs   .= $message[0] . "\n";
+                $base64 .= $message[1] . "\n";
+            }
+        }
     }
 
     my $new_messages
         = "<!DOCTYPE html><meta charset=utf8><body><h1>Новые сообщения</h1>\n";
     if ( defined($msgs) ) {
-        my @msg_list = split /\n/, $msgs;
+        my @msg_list = split /\n/, $base64;
 
         # Begin transaction
-        print localtime().": writing messages\n";
+        print localtime() . ": writing messages\n";
         $db->begin();
         while (<@msg_list>) {
             my $mes_hash = $_;
 
-            my $text = II::Enc->decrypt("./msg/$mes_hash");
+            my $text = II::Enc->decrypt($mes_hash);
 
             open my $m, "<", \$text
                 or die "Cannot open message: $!\n";
@@ -109,9 +155,10 @@ sub get_echo {
             # Write message to DB
             $db->write(%data);
         }
+
         # Commit transaction
         $db->commit();
-        print localtime().": messages writed to DB!\n";
+        print localtime() . ": messages writed to DB!\n";
     }
     return $msgs;
 }
