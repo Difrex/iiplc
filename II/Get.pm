@@ -68,7 +68,7 @@ sub get_echo {
             }
         }
         else {
-            print $res->status_line, "\n";
+            print $res_echo->status_line, "\n";
         }
         $db->commit();
 
@@ -83,7 +83,7 @@ sub get_echo {
                 push( @msg_con, $res_msg->content() );
             }
             else {
-                print $res->status_line, "\n";
+                print $res_msg->status_line, "\n";
             }
             $count++;
         }
