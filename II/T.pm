@@ -150,7 +150,7 @@ sub pre {
 
     $post =~ s/</&lt;/g;
     $post =~ s/>/&gt;/g;
-    $post =~ s/&gt;(.+)/<font color='green'>>$1<\/font><br>/g;
+    $post =~ s/&gt;(.+)/<font color='green'>>$1<\/font>/g;
     $post =~ s/^$/<br>\n/g;
     $post =~ s/(.?)\n/$1<br>\n/g;
     $post
