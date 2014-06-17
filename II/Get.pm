@@ -72,14 +72,6 @@ sub get_echo {
         }
         $db->commit();
 
-        # Make new messages url
-        # my $new_messages_url = "$host$msg_url";
-        # my $count = 0;
-        # while ( $count < @new ) {
-        #     $new_messages_url .= $new[$count]->{hash} . "/";
-        #     $count++;
-        # }
-
         # Get messages
         my @msg_con;
         my $count = 0;

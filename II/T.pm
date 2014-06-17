@@ -95,7 +95,7 @@ sub post {
     my $post = II::T->pre( $data->{post} );
 
     my $cut;
-    if ( $data->{subg} =~ /Re:\s(.+)/ ) {
+    if ( $data->{subg} =~ /Re:\s+(.+)/ ) {
         $cut = $1;
     }
     else {
@@ -132,7 +132,7 @@ sub send {
 
     my $post = II::T->pre( $data->{post} );
 
-    $data->{subg} =~ s/Re:(.+)/$1/g;
+    $data->{subg} =~ s/Re:\s+(.+)/$1/g;
 
     $p->param( SUBG => $data->{subg} );
     $p->param( TIME => "$time" );
