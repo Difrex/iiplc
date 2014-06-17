@@ -36,6 +36,7 @@ sub get_echo {
 
     my $msgs;
     my $base64;
+    my @messages_hash;
     foreach my $echo (@$echoareas) {
 
         # Get echo message hashes
@@ -60,7 +61,7 @@ sub get_echo {
 
                         # Write new echo message
                         $db->write_echo(%e_write);
-
+                        $msgs .= $_ . "\n";
                         push( @new, $echo_hash );
                     }
                 }
@@ -95,12 +96,15 @@ sub get_echo {
             $count++;
         }
 
-        # Populate $msgs and $base64
+        # Populate hash
         while (<@msg_con>) {
             my @message = split /:/, $_;
             if ( defined( $message[1] ) ) {
-                $msgs   .= $message[0] . "\n";
-                $base64 .= $message[1] . "\n";
+                my $h = {
+                    hash   => $message[0],
+                    base64 => $message[1],
+                };
+                push( @messages_hash, $h );
             }
         }
     }
@@ -108,15 +112,15 @@ sub get_echo {
     my $new_messages
         = "<!DOCTYPE html><meta charset=utf8><body><h1>Новые сообщения</h1>\n";
     if ( defined($msgs) ) {
-        my @msg_list = split /\n/, $base64;
 
         # Begin transaction
         print localtime() . ": writing messages\n";
         $db->begin();
-        while (<@msg_list>) {
-            my $mes_hash = $_;
 
-            my $text = II::Enc->decrypt($mes_hash);
+        my $c = 0;
+        while ( $c < @messages_hash ) {
+            my $mes_hash = $messages_hash[$c]->{hash};
+            my $text = II::Enc->decrypt( $messages_hash[$c]->{base64} );
 
             open my $m, "<", \$text
                 or die "Cannot open message: $!\n";
@@ -154,6 +158,7 @@ sub get_echo {
 
             # Write message to DB
             $db->write(%data);
+            $c++;
         }
 
         # Commit transaction

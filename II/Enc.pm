@@ -22,7 +22,8 @@ sub decrypt {
     my ( $self, $base64 ) = @_;
 
     # Decrypt message
-    my $dec = `echo "$base64" | base64 -d`;
+    my $dec = decode_base64($base64);
+    # my $dec = `echo "$base64" | base64 -d`;
 
     return $dec;
 }
