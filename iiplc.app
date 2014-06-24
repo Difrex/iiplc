@@ -1,3 +1,4 @@
+#!/usr/bin/perl
 # Copyright © 2014 Difrex <difrex.punk@gmail.com>
 # This work is free. You can redistribute it and/or modify it under the
 # terms of the Do What The Fuck You Want To Public License, Version 2,
@@ -7,7 +8,7 @@
 # the extent permitted by applicable law. You can redistribute it
 # and/or modify it under the terms of the Do What The Fuck You Want
 # To Public License, Version 2, as published by Sam Hocevar. See
-# http://www.wtfpl.net/ for more details. 
+# http://www.wtfpl.net/ for more details.
 
 use strict;
 use warnings;
@@ -40,7 +41,7 @@ my $echo = sub {
     my $echo = $req->param('echo');
     my $view = $req->param('view');
 
-    my $echo_messages = $render->echo_mes($echo, $view);
+    my $echo_messages = $render->echo_mes( $echo, $view );
 
     return [ 200, [ 'Content-type' => 'text/html' ], ["$echo_messages"], ];
 };
@@ -154,10 +155,22 @@ my $push = sub {
     return [ 302, [ 'Location' => "/e?echo=$echo" ], [], ];
 };
 
+# Messages from user
+my $user = sub {
+    my $env = shift;
+
+    my $req      = Plack::Request->new($env);
+    my $user     = $req->param('user');
+    my $mes_from = $render->user($user);
+
+    return [ 200, [ 'Content-type' => 'text/html' ], [$mes_from], ];
+};
+
 builder {
     mount '/'     => $root;
     mount '/e'    => $echo;
     mount '/s'    => $thread;
+    mount '/u'    => $user;
     mount '/me'   => $me;
     mount '/tree' => $tree;
     mount '/get/' => $get;

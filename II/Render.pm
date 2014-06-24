@@ -74,7 +74,7 @@ sub echo_mes {
     $render .= $t->echo($echo);
 
     my $count = 0;
-    if ($view eq 'thread') {
+    if ( $view eq 'thread' ) {
         while ( $count < @post ) {
 
             # Render post
@@ -149,6 +149,29 @@ sub index {
     $render .= $t->foot();
 
     return $render;
+}
+
+# Messages from user
+sub user {
+    my ( $self, $user ) = @_;
+    my $db = $self->{_db};
+    my $t  = $self->{_template};
+
+    # Render header
+    my $render
+        = $t->head("ii :: Сообщения пользователя $user");
+
+    my @post = $db->select_user($user);
+
+    my $count = 0;
+    while ( $count < @post ) {
+
+        # Render post
+        $render .= $t->post( @post[$count] );
+        $count++;
+    }
+    $render .= $t->foot();
+
 }
 
 # Render new message form

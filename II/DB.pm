@@ -24,13 +24,13 @@ sub check_hash {
     my ( $self, $hash, $echo ) = @_;
     my $dbh = $self->{_dbh};
 
-    my $q = "select hash from echo where hash='$hash' and echo='$echo'";
+    my $q   = "select hash from echo where hash='$hash' and echo='$echo'";
     my $sth = $dbh->prepare($q);
     $sth->execute();
 
     while ( my @h = $sth->fetchrow_array() ) {
         my ($base_hash) = @h;
-        if ($hash eq $base_hash) {
+        if ( $hash eq $base_hash ) {
             return 1;
         }
         else {
@@ -151,6 +151,35 @@ sub select_index {
 sub select_subg {
     my ( $self, $echo ) = @_;
 
+}
+
+# Select user messages
+sub select_user {
+    my ( $self, $user ) = @_;
+    my $dbh = $self->{_dbh};
+
+    my $q
+        = "select from_user, to_user, subg, time, echo, post, hash from messages where from_user='$user' order by time desc";
+
+    my $sth = $dbh->prepare($q);
+    $sth->execute();
+
+    my @posts;
+    while ( my @hash = $sth->fetchrow_array() ) {
+        my ( $from, $to, $subg, $time, $echo, $post, $h ) = @hash;
+        my $data = {
+            from => "$from",
+            to   => "$to",
+            subg => "$subg",
+            time => $time,
+            echo => "$echo",
+            post => "$post",
+            hash => $h,
+        };
+        push( @posts, $data );
+    }
+
+    return @posts;
 }
 
 sub from_me {
