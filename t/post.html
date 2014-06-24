@@ -2,8 +2,8 @@
 	<a style="text-decoration:none;" href="/s?subg=<TMPL_VAR NAME=CUT>&echo=<TMPL_VAR NAME=ECHO>"><h2><TMPL_VAR NAME=SUBG></h2></a>
 	<div class=mail>
 		<i><TMPL_VAR NAME=TIME></i><br>
-		From: <strong><TMPL_VAR NAME=FROM></strong><br>
-		To: <strong><TMPL_VAR NAME=TO></strong> in <a style='color:#222;' href='/e?echo=<TMPL_VAR NAME=ECHO>&view=thread'><TMPL_VAR NAME=ECHO></a>
+		From: <strong><a style='color:#222;text-decoration:none;' href='/u?user=<TMPL_VAR NAME=FROM>'><TMPL_VAR NAME=FROM></a></strong><br>
+		To: <strong><a style='color:#222;text-decoration:none;' href='/u?user=<TMPL_VAR NAME=TO>'><TMPL_VAR NAME=TO></a></strong> in <a style='color:#222;' href='/e?echo=<TMPL_VAR NAME=ECHO>&view=thread'><TMPL_VAR NAME=ECHO></a>
 	</div>
 	<div class=text>
 		<p>
