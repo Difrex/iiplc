@@ -46,6 +46,9 @@ sub encode {
     $encoded =~ s/\//_/g;
     $encoded =~ s/\+/-/g;
 
+    # Preparsing
+    my $post = II::T->in_pre($data->{post});
+
     # Make data
     my %out = (
         hash      => $hash,
@@ -54,7 +57,7 @@ sub encode {
         from_user => $data->{from},
         to_user   => $data->{to},
         subg      => $data->{subg},
-        post      => $data->{post},
+        post      => $post,
         base64    => $encoded,
         send      => 0,
     );

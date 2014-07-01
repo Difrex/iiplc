@@ -145,12 +145,28 @@ sub send {
     return $p->output();
 }
 
+# Preparsing before input to SQL
+sub in_pre {
+    my ($self, $post) = @_;
+
+    $post =~ s/'/\\'/g;
+    $post =~ s/"/\\"/g;
+    $post =~ s/'/\\'/g;
+    $post =~ s/`/\\`/g;
+    $post =~ s/\$/\\\$/g;
+
+    return $post;
+}
+
+# Preparsing output
 sub pre {
     my ( $self, $post ) = @_;
 
     $post =~ s/</&lt;/g;
     $post =~ s/>/&gt;/g;
     $post =~ s/&gt;(.+)/<font color='green'>>$1<\/font>/g;
+    $post =~ s/--/&mdash;/g;
+    $post =~ s/.?\*(.+)\*.?/<b>$1<\/b>/g;
     $post =~ s/^$/<br>\n/g;
     $post =~ s/(.?)\n/$1<br>\n/g;
     $post
