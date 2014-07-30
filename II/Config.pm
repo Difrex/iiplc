@@ -22,12 +22,14 @@ sub load {
     my $nick      = $config->{auth}->{nick};
     my $host      = $config->{node}->{host};
     my @echoareas = split /,/, $config->{node}->{echoareas};
+    my $name      = $config->{node}->{name};
 
     $c = {
         nick      => $nick,
         key       => $key,
         host      => $host,
         echoareas => [@echoareas],
+        name      => $name,
     };
 
     return $c;
