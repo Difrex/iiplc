@@ -10,10 +10,13 @@ sub new {
 
     my $db = II::DB->new();
     my $t  = II::T->new();
+    my $c  = II::Config->new();
+    my $config = $c->load();
 
     my $self = {
         _db       => $db,
         _template => $t,
+        _config   => $config,
     };
 
     bless $self, $class;
@@ -24,11 +27,12 @@ sub thread {
     my ( $self, $subg, $echo ) = @_;
     my $db = $self->{_db};
     my $t  = $self->{_template};
+    my $config = $self->{_config};
 
     my @post = $db->thread( $subg, $echo );
 
     # Render header
-    my $render = $t->head("ii :: $echo");
+    my $render = $t->head("ii ". $config->{name} ." :: $echo");
     my $count  = 0;
     while ( $count < @post ) {
         $render .= $t->post( @post[$count] );
@@ -44,12 +48,13 @@ sub out {
     my ($self) = @_;
     my $db     = $self->{_db};
     my $t      = $self->{_template};
+    my $config = $self->{_config};
 
     my @post = $db->select_out();
 
     # Render header
     my $render
-        = $t->head('ii :: неотправленные сообщения');
+        = $t->head('ii '. $config->{name} .' :: неотправленные сообщения');
 
     my $count = 0;
     while ( $count < @post ) {
@@ -66,11 +71,12 @@ sub echo_mes {
     my ( $self, $echo, $view ) = @_;
     my $db = $self->{_db};
     my $t  = $self->{_template};
+    my $config = $self->{_config};
 
     my @post = $db->echoes($echo);
 
     # Render header
-    my $render = $t->head("ii :: $echo");
+    my $render = $t->head("ii ". $config->{name} ." :: $echo");
     $render .= $t->echo($echo);
 
     my $count = 0;
@@ -101,12 +107,13 @@ sub to_me {
     my ( $self, $config ) = @_;
     my $db = $self->{_db};
     my $t  = $self->{_template};
+    my $config = $self->{_config};
 
     my @post         = $db->to_me($config);
     my @post_from_me = $db->from_me($config);
 
     # Render header
-    my $render = $t->head('ii :: Моя переписка');
+    my $render = $t->head('ii '. $config->{name} .' :: Моя переписка');
 
     my $count = 0;
     while ( $count < @post ) {
@@ -136,7 +143,7 @@ sub index {
     my @hashes = $db->select_index(50);
 
     # Render header
-    my $render = $t->head('ii :: Лента');
+    my $render = $t->head('ii '. $config->{name} .' :: Лента');
     $render .= $t->index($echoareas);
 
     while (<@hashes>) {
@@ -156,10 +163,11 @@ sub user {
     my ( $self, $user ) = @_;
     my $db = $self->{_db};
     my $t  = $self->{_template};
+    my $config = $self->{_config};
 
     # Render header
     my $render
-        = $t->head("ii :: Сообщения пользователя $user");
+        = $t->head("ii ". $config->{name} ." :: Сообщения пользователя $user");
 
     my @post = $db->select_user($user);
 
@@ -178,8 +186,9 @@ sub user {
 sub send_new {
     my ( $self, $echo ) = @_;
     my $t = $self->{_template};
+    my $config = $self->{_config};
 
-    my $render = $t->head("ii :: Новое сообщение");
+    my $render = $t->head("ii ". $config->{name} ." :: Новое сообщение");
 
     $render .= $t->new_mes($echo);
     $render .= $t->foot();
@@ -192,8 +201,9 @@ sub send {
     my ( $self, $hash ) = @_;
     my $db = $self->{_db};
     my $t  = $self->{_template};
+    my $config = $self->{_config};
 
-    my $render = $t->head("ii :: Ответ на $hash");
+    my $render = $t->head("ii". $config->{name} ." :: Ответ на $hash");
 
     # Render post
     my $data = $db->select_new($hash);
@@ -209,8 +219,9 @@ sub new_mes {
     my ( $self, $msgs ) = @_;
     my $db = $self->{_db};
     my $t  = $self->{_template};
+    my $config = $self->{_config};
 
-    my $render = $t->head('ii :: Новые сообщения');
+    my $render = $t->head('ii '. $config->{name} .' :: Новые сообщения');
 
     # Render posts
     if ( defined($msgs) ) {
