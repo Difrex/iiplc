@@ -166,7 +166,7 @@ sub pre {
     $post =~ s/>/&gt;/g;
     $post =~ s/&gt;(.+)/<font color='green'>>$1<\/font>/g;
     $post =~ s/--/&mdash;/g;
-    $post =~ s/.?\*(.+)\*.?/<b>$1<\/b>/g;
+    $post =~ s/.?\*(.+)\*.?/&nbsp<b>$1<\/b>&nbsp/g;
     $post =~ s/^$/<br>\n/g;
     $post =~ s/(.?)\n/$1<br>\n/g;
     $post
