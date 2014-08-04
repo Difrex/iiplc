@@ -19,6 +19,8 @@ use warnings;
 use Plack::Builder;
 use Plack::Request;
 use Plack::Response;
+# Static files
+use Plack::App::File;
 
 use II::Config;
 use II::Get;
@@ -169,7 +171,9 @@ my $user = sub {
     return [ 200, [ 'Content-type' => 'text/html' ], [$mes_from], ];
 };
 
+# Mountpoints
 builder {
+    mount "/static" => Plack::App::File->new(root => './s/')->to_app;
     mount '/'     => $root;
     mount '/e'    => $echo;
     mount '/s'    => $thread;
