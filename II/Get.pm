@@ -72,32 +72,21 @@ sub get_echo {
         }
         $db->commit();
 
-        # Get messages
-        my @msg_con;
+        # Get messages and populate hash
         my $count = 0;
         while ( $count < @new ) {
             my $new_messages_url = "$host$msg_url" . $new[$count]->{hash};
             my $req_msg = HTTP::Request->new( GET => $new_messages_url );
             my $res_msg = $ua->request($req_msg);
+            
             if ( $res_msg->is_success() ) {
-                push( @msg_con, $res_msg->content() );
+                my ( $hash, $m ) = split(':', $res_msg->content());
+                push( @messages_hash, { hash => $hash, base64 => $m } );
             }
             else {
                 print $res_msg->status_line, "\n";
             }
             $count++;
-        }
-
-        # Populate hash
-        while (<@msg_con>) {
-            my @message = split /:/, $_;
-            if ( defined( $message[1] ) ) {
-                my $h = {
-                    hash   => $message[0],
-                    base64 => $message[1],
-                };
-                push( @messages_hash, $h );
-            }
         }
     }
 

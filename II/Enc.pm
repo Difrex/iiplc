@@ -21,11 +21,7 @@ sub new {
 sub decrypt {
     my ( $self, $base64 ) = @_;
 
-    # Decrypt message
-    my $dec = decode_base64($base64);
-    # my $dec = `echo "$base64" | base64 -d`;
-
-    return $dec;
+    return decode_base64($base64);
 }
 
 sub encode {
@@ -42,7 +38,8 @@ sub encode {
     $message .= '@repto:' . $data->{hash} . "\n" if defined( $data->{hash} );
     $message .= $data->{post};
 
-    my $encoded = `echo "$message" | base64`;
+    # my $encoded = `echo "$message" | base64`;
+    my $encoded = encode_base64($message);
     $encoded =~ s/\//_/g;
     $encoded =~ s/\+/-/g;
 
