@@ -169,6 +169,7 @@ sub pre {
     $post =~ s/.?\*(.+)\*.?/&nbsp<b>$1<\/b>&nbsp/g;
     $post =~ s/^$/<br>\n/g;
     $post =~ s/(.?)\n/$1<br>\n/g;
+    $post =~ s/\*(.+)/<li>$1<\/li>\n/g;
     $post
         =~ s/(https?:\/\/.+\.(jpg|png|gif))/<a href="$1"><img src="$1" width="15%" height="15%" \/><\/a>/g;
     $post

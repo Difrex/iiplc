@@ -45,30 +45,33 @@ padding-bottom: 0.15em;
 .subg a:visited {
   color: #666;
 }
-  .mail {
-      display: block;
-      margin-top: 0.1em;
-      margin-left: 0.5em;
-  }
-  .text {
-      display: block;
-      margin-left: 0.5em;
-      margin-top: -0.8em;
-      margin-right: 0.5em;
-  }
-  .headall {
-  text-align: center;
-      display: block;
-  color: #000;
-  background-color: #C9C9C9;
-  border-radius: 5px;
-  width: 75%;
-  position: top;
-  top: 0px;
-      margin-left: 15%;
-      margin-right: 15%;
-  margin-bottom: 0%;
-  }
+.mail {
+    display: block;
+    margin-top: 0.1em;
+    margin-left: 0.5em;
+}
+.text {
+    display: block;
+    margin-left: 0.5em;
+    margin-top: -0.8em;
+    margin-right: 0.5em;
+}
+.post li {
+  margin-left: 1.5em;
+}
+.headall {
+text-align: center;
+    display: block;
+color: #000;
+background-color: #C9C9C9;
+border-radius: 5px;
+width: 75%;
+position: top;
+top: 0px;
+    margin-left: 15%;
+    margin-right: 15%;
+margin-bottom: 0%;
+}
 .headall p {
   margin-top: -1.5em;
   text-align: center;
