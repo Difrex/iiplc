@@ -168,38 +168,16 @@ sub pre {
     $post =~ s/--/&mdash;/g;
     $post =~ s/.?\*(.+)\*.?/&nbsp<b>$1<\/b>&nbsp/g;
     
-    # URI's parsing
-    if ( $post =~ m!^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?! ) {
-        
-        print "\n2:=$2=\n";
-        # Images
-        if ( $9 !=~ m/.+\.(jpg|png|gif)/ ) {
-            $post
-                =~ s/(https?:\/\/.+)/<a href="$1">$1<\/a>/g;
-        }
-        elsif ( $9 =~ m/.+\.((jpg|png|gif)|(JPG|PNG|GIF))/ ) {
-            $post
-                =~ s/(https?:\/\/.+\.(jpg|png|gif))/<a href="$1"><img src="$1" width="15%" height="15%" \/><\/a>/g;
-            $post
-                =~ s/(https?:\/\/.+\.(JPG|PNG|GIF))/<a href="$1"><img src="$1" width="15%" height="15%" \/><\/a>/g;
-        }
-        elsif ( $2 eq 'ii' ) {
-            # ii uri
-            $post =~ s/ii:\/\/(.+\.\d{1,4}),?.+/<a href="\/e?echo=$1&view=thread">$1<\/a>/g;
-            $post =~ s/ii:\/\/(.{20})/<a href="\/send?hash=$1">$1<\/a>/g;
-        }
-    }
+    # Images
+    $post =~ s/\[img (.+)\]/<a href="$1"><img src="$1" width="15%" height="15%" \/><\/a>/g;
+    
+    # ii uri
+    $post =~ s/ii:\/\/(.+\.\d{1,2,3,4}),?.+/<a href="\/e?echo=$1&view=thread">$1<\/a>/g;
+    $post =~ s/ii:\/\/(.{20})/<a href="\/send?hash=$1">$1<\/a>/g;
     
     $post =~ s/^$/<br>\n/g;
     $post =~ s/(.?)\n/$1<br>\n/g;
     $post =~ s/\*(.+)/<li>$1<\/li>\n/g;
-    
-
-    # Url
-    # use Regexp::Common "URI";
-    # $post =~    s( ($RE{URI}{HTTP}) )
-    #             (<a href="$1">$1</a>)gx;
-    
     
     # Not are regexp parsing
     my $pre = 0;
@@ -223,6 +201,7 @@ sub pre {
     return $txt;
 }
 
+# Footer
 sub foot {
     my ($self) = @_;
 
