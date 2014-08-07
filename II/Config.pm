@@ -5,10 +5,7 @@ use Config::Tiny;
 sub new {
     my $class = shift;
 
-    my $c = Config::Tiny->new();
-    $c = Config::Tiny->read('config.ini');
-
-    my $self = { _config => $c, };
+    my $self = { _file => 'config.ini', };
 
     bless $self, $class;
     return $self;
@@ -17,8 +14,11 @@ sub new {
 # Load configuration
 sub load {
     my ($self) = @_;
-    my $config = $self->{_config};
-
+    my $file = $self->{_file};
+    
+    my $tiny = Config::Tiny->new();
+    $config = $tiny->read($file);
+    
     my $key       = $config->{auth}->{key};
     my $nick      = $config->{auth}->{nick};
     my $host      = $config->{node}->{host};
@@ -40,7 +40,10 @@ sub load {
 sub reload {
     my ($self) = @_;
 
-    return II::Config->load();
+    my $c = II::Config->new();
+    my $config = $c->load();
+
+    return $config;
 }
 
 1;
