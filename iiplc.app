@@ -71,16 +71,19 @@ my $get = sub {
 };
 
 my $root = sub {
+    $config = $c->reload();
     my $index = $render->index($config);
     return [ 200, [ 'Content-type' => 'text/html' ], [$index], ];
 };
 
 my $me = sub {
+    $config = $c->reload();
     my $messages = $render->to_me($config);
     return [ 200, [ 'Content-type' => 'text/html' ], [$messages], ];
 };
 
 my $tree = sub {
+    $config = $c->reload();
     my $subges = $render->tree($config);
     return [ 200, [ 'Content-type' => 'text/html' ], ['Дерево'], ];
 };
@@ -118,7 +121,7 @@ my $enc = sub {
     my $hash = $req->param('hash');
     my $time = time();
 
-    print Dumper($config);
+    $config = $c->reload();
     my $data = {
         echo => $echo,
         to   => $to,
@@ -151,6 +154,7 @@ my $push = sub {
     my $base64 = $req->param('base64');
     my $hash   = $req->param('hash');
 
+    $config = $c->reload();
     my $s = II::Send->new( $config, $echo, $base64 );
     $s->send($hash);
 
