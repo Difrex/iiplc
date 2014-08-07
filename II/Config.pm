@@ -14,6 +14,7 @@ sub new {
     return $self;
 }
 
+# Load configuration
 sub load {
     my ($self) = @_;
     my $config = $self->{_config};
@@ -33,6 +34,13 @@ sub load {
     };
 
     return $c;
+}
+
+# Reload configuration
+sub reload {
+    my ($self) = @_;
+
+    return II::Config->load();
 }
 
 1;
