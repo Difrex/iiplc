@@ -172,7 +172,7 @@ sub pre {
     $post =~ s/\[img (.+)\]/<a href="$1"><img src="$1" width="15%" height="15%" \/><\/a>/g;
     
     # ii uri
-    $post =~ s/ii:\/\/(.{20})/<a href="\/send?hash=$1">$1<\/a>/g;
+    $post =~ s/ii:\/\/(.{20})\s/<a href="\/send?hash=$1">$1<\/a>/g;
     # $post =~ s/ii:\/\/(.+\.\d+)/<a href="\/e?echo=$1&view=thread">$1<\/a>/g;
 
     $post =~ s/^$/<br>\n/g;
