@@ -262,7 +262,7 @@ sub echoes {
             time => $time,
             echo => "$echo",
             post => "$post",
-            h    => $h,
+            hash => $h,
         };
         push( @posts, $data );
     }
