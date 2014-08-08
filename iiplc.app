@@ -35,7 +35,6 @@ use Data::Dumper;
 my $c      = II::Config->new();
 my $config = $c->load();
 
-my $GET    = II::Get->new($config);
 my $render = II::Render->new();
 
 my $echo = sub {
@@ -65,6 +64,8 @@ my $thread = sub {
 };
 
 my $get = sub {
+    $config = $c->reload();
+    my $GET    = II::Get->new($config);
     my $msgs    = $GET->get_echo();
     my $new_mes = $render->new_mes($msgs);
     return [ 200, [ 'Content-type' => 'text/html' ], ["$new_mes"], ];
