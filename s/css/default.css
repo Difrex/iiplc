@@ -39,6 +39,12 @@ padding-bottom: 0.15em;
   padding-left: 5pt;
   padding-top: 5pt;
 }
+.msg_hash {
+  float: right;
+  margin-right: 1em;
+  color: #222;
+  opacity: 0.4;
+}
 .subg a {
   color: #222;
 }
