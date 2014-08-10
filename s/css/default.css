@@ -42,9 +42,11 @@ padding-bottom: 0.15em;
 .msg_hash {
   float: right;
   margin-right: 1.5em;
-  margin-top: 1.5em;
+  margin-top: 2em;
   color: #222;
   opacity: 0.4;
+  font-family: monospace;
+  font-size: 8pt;
 }
 .subg a {
   color: #222;
