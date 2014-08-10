@@ -147,7 +147,7 @@ sub send {
 
 # Preparsing before input to SQL
 sub in_pre {
-    my ($self, $post) = @_;
+    my ( $self, $post ) = @_;
 
     $post =~ s/'/\\'/g;
     $post =~ s/"/\\"/g;
@@ -167,18 +167,20 @@ sub pre {
     $post =~ s/&gt;(.+)/<font color='green'>>$1<\/font>/g;
     $post =~ s/--/&mdash;/g;
     $post =~ s/.?\*(.+)\*.?/&nbsp<b>$1<\/b>&nbsp/g;
-    
+
     # Images
-    $post =~ s/\[img (.+)\]/<a href="$1"><img src="$1" width="15%" height="15%" \/><\/a>/g;
-    
+    $post
+        =~ s/\[img (.+)\]/<a href="$1"><img src="$1" width="15%" height="15%" \/><\/a>/g;
+
     # ii uri
     $post =~ s/ii:\/\/(.{20})\s/<a href="\/send?hash=$1">$1<\/a>/g;
+
     # $post =~ s/ii:\/\/(.+\.\d+)/<a href="\/e?echo=$1&view=thread">$1<\/a>/g;
 
     $post =~ s/^$/<br>\n/g;
     $post =~ s/(.?)\n/$1<br>\n/g;
     $post =~ s/\*(.+)/<li>$1<\/li>\n/g;
-    
+
     # Not are regexp parsing
     my $pre = 0;
     my $txt;
@@ -186,6 +188,7 @@ sub pre {
     while (<$fh>) {
         my $line = $_;
         if ( ( $line =~ /^====/ ) and ( $pre == 0 ) ) {
+
             # $txt .= $_;
             $line =~ s/====/<pre class="pre">/g;
             $pre = 1;
@@ -197,8 +200,18 @@ sub pre {
         $txt .= $line;
     }
     close $fh;
-    
+
     return $txt;
+}
+
+# All messages footer
+sub all {
+    my ( $self, $echo ) = @_;
+
+    my $a = HTML::Template->new( filename => 't/all.html' );
+    $a->param( ECHO => $echo );
+
+    return $a->output();
 }
 
 # Footer

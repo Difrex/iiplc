@@ -158,3 +158,20 @@ margin-bottom: 0%;
   background-color: #C9C9C9;
   margin-right: 5%;
 }
+.all_link {
+  display: block;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #999;
+  border-radius: 5px;
+  background-color: #C9C9C9;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+  text-align: center;
+  text-decoration: underline;
+  font-size: 12pt;
+  color: #222;
+  width: 8em;
+  padding: 0.2em;
+  margin-left: 45%;
+  margin-right: 55%;
+}
