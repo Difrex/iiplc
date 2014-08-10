@@ -279,7 +279,7 @@ sub to_me {
     # print "NICK: $nick\n";
 
     my $q
-        = "select from_user, to_user, subg, time, echo, post, hash from messages where to_user='$nick'";
+        = "select from_user, to_user, subg, time, echo, post, hash from messages where to_user='$nick' order by time desc";
 
     my $sth = $dbh->prepare($q);
     $sth->execute();
