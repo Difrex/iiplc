@@ -145,6 +145,10 @@ sub get_echo {
         # Commit transaction
         $db->commit();
         print localtime() . ": messages writed to DB!\n";
+
+        # Notify 
+        my @notify_cmd = ('notify-send', 'Сеть ii', 'Есть новые сообщения');
+        system(@notify_cmd) == 0 or warn "Cannot send notify: $!\n";
     }
     return $msgs;
 }
