@@ -210,9 +210,9 @@ sub pre {
         }
         $txt .= $line;
         $txt =~ s/<br \/>//g;
-        $txt =~ s/<li>//g;
-        $txt =~ s/<\/li>//g;
-        $txt =~ s/<font.+>(>.+)<\/font>/$1/g;
+        # $txt =~ s/<li>//g;
+        # $txt =~ s/<\/li>//g;
+        # $txt =~ s/<font.+>(>.+)<\/font>/$1/g;
     }
     close $fh;
 
