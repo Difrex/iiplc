@@ -201,7 +201,6 @@ sub pre {
         my $line = $_;
         if ( ( $line =~ /^====/ ) and ( $pre == 0 ) ) {
 
-            # $txt .= $_;
             $line =~ s/====/<pre class="pre">/g;
             $pre = 1;
         }
@@ -210,6 +209,10 @@ sub pre {
             $pre = 0;
         }
         $txt .= $line;
+        $txt =~ s/<br \/>//g;
+        $txt =~ s/<li>//g;
+        $txt =~ s/<\/li>//g;
+        $txt =~ s/<font.+>(>.+)<\/font>/$1/g;
     }
     close $fh;
 
