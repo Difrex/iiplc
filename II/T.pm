@@ -209,10 +209,10 @@ sub pre {
             $pre = 0;
         }
         $txt .= $line;
-        $txt =~ s/<br \/>//g;
-        # $txt =~ s/<li>//g;
-        # $txt =~ s/<\/li>//g;
-        # $txt =~ s/<font.+>(>.+)<\/font>/$1/g;
+        $txt =~ s/<br \/>//g if $pre == 1;
+        $txt =~ s/<li>//g if $pre == 1;
+        $txt =~ s/<\/li>//g if $pre == 1;
+        $txt =~ s/<font.+>(>.+)<\/font>/$1/g if $pre == 1;
     }
     close $fh;
 
