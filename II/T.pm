@@ -1,6 +1,8 @@
 package II::T;
 
 use HTML::Template;
+use HTML::FromText ();
+use Encode;
 use Data::Dumper;
 
 sub new {
@@ -162,11 +164,26 @@ sub in_pre {
 sub pre {
     my ( $self, $post ) = @_;
 
-    $post =~ s/</&lt;/g;
-    $post =~ s/>/&gt;/g;
+    my $t2h = HTML::FromText->new(
+        {   paras     => 1,
+            bullets   => 1,
+            lines     => 1,
+            blockcode => 1,
+            tables    => 0,
+            numbers   => 0,
+            urls      => 0,
+            email     => 1,
+            bold      => 1,
+            underline => 1,
+        }
+    );
+
+    $post = $t2h->parse( decode_utf8($post) );
     $post =~ s/&gt;(.+)/<font color='green'>>$1<\/font>/g;
     $post =~ s/--/&mdash;/g;
-    $post =~ s/.?\*(.+)\*.?/&nbsp<b>$1<\/b>&nbsp/g;
+
+    # Lists
+    $post =~ s/\*(.+)/<li>$1<\/li>/g;
 
     # Images
     $post
@@ -174,12 +191,6 @@ sub pre {
 
     # ii uri
     $post =~ s/ii:\/\/(.{20})\s/<a href="\/send?hash=$1">$1<\/a>/g;
-
-    # $post =~ s/ii:\/\/(.+\.\d+)/<a href="\/e?echo=$1&view=thread">$1<\/a>/g;
-
-    $post =~ s/^$/<br>\n/g;
-    $post =~ s/(.?)\n/$1<br>\n/g;
-    $post =~ s/\*(.+)/<li>$1<\/li>\n/g;
 
     # Not are regexp parsing
     my $pre = 0;
