@@ -25,7 +25,3 @@ On Debian based systems:
 
 	cd /path/to/iiplc
 	./run.sh
-
-## TODO
-
-* Check link before send
