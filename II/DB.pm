@@ -20,6 +20,7 @@ sub new {
     return $self;
 }
 
+# Check message hash
 sub check_hash {
     my ( $self, $hash, $echo ) = @_;
     my $dbh = $self->{_dbh};
@@ -39,6 +40,7 @@ sub check_hash {
     }
 }
 
+# Begin transaction
 sub begin {
     my ($self) = @_;
     my $dbh = $self->{_dbh};

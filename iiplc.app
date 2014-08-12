@@ -19,6 +19,7 @@ use warnings;
 use Plack::Builder;
 use Plack::Request;
 use Plack::Response;
+
 # Static files
 use Plack::App::File;
 
@@ -65,7 +66,7 @@ my $thread = sub {
 
 my $get = sub {
     $config = $c->reload();
-    my $GET    = II::Get->new($config);
+    my $GET     = II::Get->new($config);
     my $msgs    = $GET->get_echo();
     my $new_mes = $render->new_mes($msgs);
     return [ 200, [ 'Content-type' => 'text/html' ], ["$new_mes"], ];
@@ -176,19 +177,34 @@ my $user = sub {
     return [ 200, [ 'Content-type' => 'text/html' ], [$mes_from], ];
 };
 
+# Search
+########
+my $search = sub {
+    my $env = shift;
+
+    my $req   = Plack::Request->new($env);
+    my $query = $req->param('q');
+
+    my $db     = II::DB->new();
+    my $result = $db->do_search($q);
+
+    return [ 200, [ 'Content-type' => 'text/html' ], [$result], ];
+};
+
 # Mountpoints
 builder {
-    mount "/static" => Plack::App::File->new(root => './s/')->to_app;
-    mount '/'     => $root;
-    mount '/e'    => $echo;
-    mount '/s'    => $thread;
-    mount '/u'    => $user;
-    mount '/me'   => $me;
-    mount '/tree' => $tree;
-    mount '/get/' => $get;
-    mount '/send' => $send;
-    mount '/enc'  => $enc;
-    mount '/out'  => $out;
-    mount '/push' => $push;
-    mount '/new'  => $new;
+    mount "/static" => Plack::App::File->new( root => './s/' )->to_app;
+    mount "/search" => $search;
+    mount '/'       => $root;
+    mount '/e'      => $echo;
+    mount '/s'      => $thread;
+    mount '/u'      => $user;
+    mount '/me'     => $me;
+    mount '/tree'   => $tree;
+    mount '/get'    => $get;
+    mount '/send'   => $send;
+    mount '/enc'    => $enc;
+    mount '/out'    => $out;
+    mount '/push'   => $push;
+    mount '/new'    => $new;
 };
