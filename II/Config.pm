@@ -15,15 +15,16 @@ sub new {
 sub load {
     my ($self) = @_;
     my $file = $self->{_file};
-    
+
     my $tiny = Config::Tiny->new();
     $config = $tiny->read($file);
-    
+
     my $key       = $config->{auth}->{key};
     my $nick      = $config->{auth}->{nick};
     my $host      = $config->{node}->{host};
     my @echoareas = split /,/, $config->{node}->{echoareas};
     my $name      = $config->{node}->{name};
+    my $notify    = $config->{notify}->{enabled};
 
     $c = {
         nick      => $nick,
@@ -31,6 +32,7 @@ sub load {
         host      => $host,
         echoareas => [@echoareas],
         name      => $name,
+        notify    => $notify,
     };
 
     return $c;
@@ -40,7 +42,7 @@ sub load {
 sub reload {
     my ($self) = @_;
 
-    my $c = II::Config->new();
+    my $c      = II::Config->new();
     my $config = $c->load();
 
     return $config;
