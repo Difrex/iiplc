@@ -2,6 +2,8 @@ package II::DB;
 
 use SQL::Abstract;
 use DBI;
+use Encode;
+use utf8;
 
 use Data::Dumper;
 
@@ -49,6 +51,7 @@ sub begin {
     $dbh->do('BEGIN');
 }
 
+# Commit transaction
 sub commit {
     my ($self) = @_;
     my $dbh = $self->{_dbh};
@@ -330,6 +333,39 @@ sub select_new {
     };
 
     return $data;
+}
+
+# Search
+sub do_search {
+    my ( $self, $query ) = @_;
+    my $dbh = $self->{_dbh};
+
+    # $query = $query;
+
+    print "QUERY " . $query . "\n";
+
+    my $q
+        = "select from_user, to_user, subg, time, echo, post, hash from messages where subg like '\%$query\%' order by time";
+
+    my $sth = $dbh->prepare($q);
+    $sth->execute();
+
+    my @posts;
+    while ( my @hash = $sth->fetchrow_array() ) {
+        my ( $from, $to, $subg, $time, $echo, $post, $h ) = @hash;
+        my $data = {
+            from => "$from",
+            to   => "$to",
+            subg => "$subg",
+            time => $time,
+            echo => "$echo",
+            post => "$post",
+            hash => "$h",
+        };
+        push( @posts, $data );
+    }
+
+    return @posts;
 }
 
 1;

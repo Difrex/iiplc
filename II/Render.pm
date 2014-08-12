@@ -263,4 +263,26 @@ sub new_mes {
     return $render;
 }
 
+# Search results
+sub search {
+    my ( $self, @post ) = @_;
+    my $t = $self->{_template};
+
+    # Render header
+    my $render
+        = $t->head(
+        "ii " . $config->{name} . " :: Результаты поиска" );
+
+    my $count = 0;
+    while ( $count < @post ) {
+
+        # Render post
+        $render .= $t->post( @post[$count] );
+        $count++;
+    }
+    $render .= $t->foot();
+
+    return $render;
+}
+
 1;

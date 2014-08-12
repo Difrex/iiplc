@@ -175,3 +175,17 @@ margin-bottom: 0%;
   margin-left: 45%;
   margin-right: 55%;
 }
+/* Search */
+.search {
+  position: fixed;
+  top: 2em;
+  left: 0.5em;
+  opacity: 0.4;
+  transition-duration: 0.5s;
+  -webkit-transition-duration: 0.5s;
+}
+.search:hover {
+  opacity: 1;
+  transition-duration: 0.5s;
+  -webkit-transition-duration: 0.5s;
+}
