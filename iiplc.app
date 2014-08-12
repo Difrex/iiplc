@@ -186,7 +186,9 @@ my $search = sub {
     my $query = $req->param('q');
 
     my $db     = II::DB->new();
-    my $result = $db->do_search($q);
+    my @post = $db->do_search($query);
+
+    my $result = $render->search(@post);
 
     return [ 200, [ 'Content-type' => 'text/html' ], [$result], ];
 };
