@@ -193,6 +193,9 @@ sub pre {
     $post =~ s/ii:\/\/(\w+(\.)?\w+\.\d{2,4})/<a href="\/e?echo=$1&view=thread">$1<\/a>/g;
     $post =~ s/ii:\/\/(\w{20})/<a href="\/send?hash=$1">$1<\/a>/g;
 
+    # Users
+    $post =~ s/@(\w+)(\s|,)/<a href="\/u?user=$1">$1<\/a>$2/g;
+
     # Not are regexp parsing
     my $pre = 0;
     my $txt;
