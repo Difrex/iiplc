@@ -194,7 +194,7 @@ sub pre {
     $post =~ s/ii:\/\/(\w{20})/<a href="\/send?hash=$1">$1<\/a>/g;
 
     # Users
-    $post =~ s/@(\w+)(\s|,)/<a href="\/u?user=$1">$1<\/a>$2/g;
+    $post =~ s/.+? \@(\w+)(.?.+)/<a href="\/u?user=$1">$1<\/a>$2/g;
 
     # Not are regexp parsing
     my $pre = 0;
