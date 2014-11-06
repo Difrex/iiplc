@@ -169,6 +169,10 @@ my $push = sub {
     my $hash   = $req->param('hash');
 
     $config = $c->reload();
+    if ( $config->{host} =~ m/.+\,.+/ ) {
+        my @hosts = split( /,/, $config->{host} );
+        $config->{host} = $hosts[0];
+    }
     my $s = II::Send->new( $config, $echo, $base64 );
     $s->send($hash);
 
