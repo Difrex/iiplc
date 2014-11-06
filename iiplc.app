@@ -64,10 +64,22 @@ my $thread = sub {
     return [ 200, [ 'Content-type' => 'text/html' ], ["$thread"], ];
 };
 
+# Get new messages
 my $get = sub {
     $config = $c->reload();
-    my $GET     = II::Get->new($config);
-    my $msgs    = $GET->get_echo();
+    my $msgs;
+    if ( $config->{host} =~ m/.+\,.+/ ) {
+        my @hosts = split( /,/, $config->{host} );
+        foreach my $host (@hosts) {
+            $config->{host} = $host;
+            my $GET = II::Get->new($config);
+            $msgs   .= $GET->get_echo();
+        }
+    }
+    else {
+        my $GET = II::Get->new($config);
+        $msgs   .= $GET->get_echo();
+    }
     my $new_mes = $render->new_mes($msgs);
     return [ 200, [ 'Content-type' => 'text/html' ], ["$new_mes"], ];
 };
