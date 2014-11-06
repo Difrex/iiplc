@@ -1,2 +1,0 @@
-#!/bin/sh
-echo "1 * * * * `whoami` wget -O /dev/null http://127.0.0.1/get" >> /etc/crontab
