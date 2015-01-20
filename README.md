@@ -19,7 +19,7 @@ Install packages.
 On Debian based systems:
 	
 	apt-get install libplack-perl libhtml-template-perl libsql-abstract-perl \
-	libdbd-sqlite3-perl libconfig-tiny-perl
+	libdbd-sqlite3-perl libconfig-tiny-perl libhtml-fromtext-perl
 
 ## Run
 
