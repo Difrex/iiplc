@@ -31,7 +31,7 @@ sub send {
     my $host = $config->{host};
     my $auth = $config->{key};
     $host .= "u/point";
-    my $ua = LWP::UserAgent->new();
+    my $ua = LWP::UserAgent->new(agent => 'Mozilla/5.0 (X11; Linux x86_64; rv:35.0) Gecko/20100101 Firefox/35.0');
     my $response
         = $ua->post( $host, { 'pauth' => $auth, 'tmsg' => $base64 } );
 
