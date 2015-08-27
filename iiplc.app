@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-# Copyright © 2014 Difrex <difrex.punk@gmail.com>
+# Copyright © 2014-2015 Difrex <difrex.punk@gmail.com>
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -29,9 +29,6 @@ use II::Send;
 use II::Render;
 use II::DB;
 use II::Enc;
-
-# Debug
-use Data::Dumper;
 
 my $c      = II::Config->new();
 my $config = $c->load();
@@ -64,10 +61,22 @@ my $thread = sub {
     return [ 200, [ 'Content-type' => 'text/html' ], ["$thread"], ];
 };
 
+# Get new messages
 my $get = sub {
     $config = $c->reload();
-    my $GET     = II::Get->new($config);
-    my $msgs    = $GET->get_echo();
+    my $msgs;
+    if ( $config->{host} =~ m/.+\,.+/ ) {
+        my @hosts = split( /,/, $config->{host} );
+        foreach my $host (@hosts) {
+            $config->{host} = $host;
+            my $GET = II::Get->new($config);
+            $msgs   .= $GET->get_echo();
+        }
+    }
+    else {
+        my $GET = II::Get->new($config);
+        $msgs   .= $GET->get_echo();
+    }
     my $new_mes = $render->new_mes($msgs);
     return [ 200, [ 'Content-type' => 'text/html' ], ["$new_mes"], ];
 };
@@ -157,6 +166,10 @@ my $push = sub {
     my $hash   = $req->param('hash');
 
     $config = $c->reload();
+    if ( $config->{host} =~ m/.+\,.+/ ) {
+        my @hosts = split( /,/, $config->{host} );
+        $config->{host} = $hosts[0];
+    }
     my $s = II::Send->new( $config, $echo, $base64 );
     $s->send($hash);
 
@@ -177,9 +190,26 @@ my $user = sub {
     return [ 200, [ 'Content-type' => 'text/html' ], [$mes_from], ];
 };
 
+# Search
+########
+my $search = sub {
+    my $env = shift;
+
+    my $req   = Plack::Request->new($env);
+    my $query = $req->param('q');
+
+    my $db     = II::DB->new();
+    my @post = $db->do_search($query);
+
+    my $result = $render->search(@post);
+
+    return [ 200, [ 'Content-type' => 'text/html' ], [$result], ];
+};
+
 # Mountpoints
 builder {
     mount "/static" => Plack::App::File->new( root => './s/' )->to_app;
+    mount "/search" => $search;
     mount '/'       => $root;
     mount '/e'      => $echo;
     mount '/s'      => $thread;

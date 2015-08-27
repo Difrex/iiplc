@@ -148,7 +148,9 @@ sub get_echo {
 
         # Notify 
         my @notify_cmd = ('notify-send', 'Сеть ii', 'Есть новые сообщения');
-        system(@notify_cmd) == 0 or warn "Cannot send notify: $!\n";
+        if ($notify == 1) {
+            system(@notify_cmd) == 0 or warn "Cannot send notify: $!\n";
+        }
     }
     return $msgs;
 }
