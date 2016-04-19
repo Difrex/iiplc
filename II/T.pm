@@ -194,7 +194,7 @@ sub pre {
     $post =~ s/ii:\/\/(\w{20})/<a href="\/send?hash=$1">$1<\/a>/g;
 
     # Users
-    $post =~ s/.+? \@(\w+)(.?.+)/<a href="\/u?user=$1">$1<\/a>$2/g;
+    # $post =~ s/.+? \@(\w+)(.?.+)/<a href="\/u?user=$1">$1<\/a>$2/g;
 
     # Not are regexp parsing
     my $pre = 0;
@@ -218,6 +218,7 @@ sub pre {
         $txt =~ s/<font.+>(>.+)<\/font>/$1/g if $pre == 1;
     }
     close $fh;
+    $txt =~ s/\n/<br>/g;
 
     return $txt;
 }

@@ -72,8 +72,7 @@ my $get = sub {
             my $GET = II::Get->new($config);
             $msgs   .= $GET->get_echo();
         }
-    }
-    else {
+    } else {
         my $GET = II::Get->new($config);
         $msgs   .= $GET->get_echo();
     }
@@ -206,6 +205,20 @@ my $search = sub {
     return [ 200, [ 'Content-type' => 'text/html' ], [$result], ];
 };
 
+# Delete out message
+####################
+my $del = sub {
+		my $env = shift;
+
+		my $req = Plack::Request->new($env);
+		my $hash = $req->param('hash');
+
+		my $db = II::DB->new();
+		$db->del_out($hash);
+
+		return [301, ['Location' => '/out'], [], ];
+};
+
 # Mountpoints
 builder {
     mount "/static" => Plack::App::File->new( root => './s/' )->to_app;
@@ -222,4 +235,5 @@ builder {
     mount '/out'    => $out;
     mount '/push'   => $push;
     mount '/new'    => $new;
+		mount '/del'    => $del;
 };

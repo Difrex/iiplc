@@ -34,8 +34,7 @@ sub check_hash {
         my ($base_hash) = @h;
         if ( $hash eq $base_hash ) {
             return 1;
-        }
-        else {
+        } else {
             return 0;
         }
     }
@@ -82,6 +81,16 @@ sub write_out {
     $sth->execute(@bind);
 
     print "Message writed to DB!\n";
+}
+
+sub del_out {
+		my ( $self, $hash ) = @_;
+		my $dbh = $self->{_dbh};
+
+		my $q = "delete from output where hash='$hash' and send=0";
+		my $sth = $dbh->prepare($q);
+		$sth->execute();
+		$sth->finish();
 }
 
 sub update_out {
@@ -339,9 +348,9 @@ sub do_search {
     my ( $self, $query ) = @_;
     my $dbh = $self->{_dbh};
 
-    my $q = "select from_user, to_user, subg, time, echo, post, hash 
-        from messages where subg 
-        like '\%$query\%' COLLATE NOCASE 
+    my $q = "select from_user, to_user, subg, time, echo, post, hash
+        from messages where subg
+        like '\%$query\%' COLLATE NOCASE
         order by time";
 
     print "SQL: " . $q . "\n";
